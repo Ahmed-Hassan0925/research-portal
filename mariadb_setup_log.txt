@@ -1,0 +1,18 @@
+[1/4] Initializing MariaDB data directory if needed...
+     Data directory already exists, skipping init.
+[2/4] Installing MariaDB as Windows service...
+Service 'MariaDB' successfully installed.
+[3/4] Starting MariaDB service...
+The MariaDB service is starting...
+The MariaDB service was started successfully.
+
+[4/4] Done. Checking status...
+
+SERVICE_NAME: MariaDB 
+        TYPE               : 10  WIN32_OWN_PROCESS  
+        STATE              : 4  RUNNING 
+                                (STOPPABLE, NOT_PAUSABLE, ACCEPTS_SHUTDOWN)
+        WIN32_EXIT_CODE    : 0  (0x0)
+        SERVICE_EXIT_CODE  : 0  (0x0)
+        CHECKPOINT         : 0x0
+        WAIT_HINT          : 0x0

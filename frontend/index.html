@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="NUCES Research Opportunity Portal — Discover and manage cutting-edge research opportunities at the National University of Computer & Emerging Sciences." />
+  <title>ResearchNexus — NUCES Research Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── PARTICLES BACKGROUND ─────────────────────────────────────── -->
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- ── NOTIFICATION TOAST ──────────────────────────────────────────── -->
+  <div id="toast" class="toast" role="alert" aria-live="polite">
+    <span id="toast-icon">✓</span>
+    <span id="toast-message"></span>
+  </div>
+
+  <!-- ── NAV ──────────────────────────────────────────────────────────── -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-brand">
+      <div class="nav-logo" aria-hidden="true">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <circle cx="18" cy="18" r="17" stroke="url(#ng)" stroke-width="2"/>
+          <path d="M10 18 L18 10 L26 18 L18 26 Z" fill="url(#ng)"/>
+          <circle cx="18" cy="18" r="4" fill="#0ff"/>
+          <defs>
+            <linearGradient id="ng" x1="0" y1="0" x2="36" y2="36">
+              <stop offset="0%" stop-color="#00f5ff"/>
+              <stop offset="100%" stop-color="#7b2fff"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <div>
+        <h1 class="nav-title">ResearchNexus</h1>
+        <p class="nav-subtitle">NUCES Peshawar</p>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <button id="btn-new-opportunity" class="btn btn-primary" aria-label="Create new research opportunity">
+        <span class="btn-icon">+</span> New Opportunity
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── MAIN CONTENT ──────────────────────────────────────────────────── -->
+  <main class="main-content" role="main">
+
+    <!-- HERO STATS BAR -->
+    <section class="stats-bar" aria-label="Portal statistics">
+      <div class="stat-card" id="stat-total">
+        <div class="stat-value" id="stat-total-value">--</div>
+        <div class="stat-label">Total Opportunities</div>
+      </div>
+      <div class="stat-card" id="stat-open">
+        <div class="stat-value stat-green" id="stat-open-value">--</div>
+        <div class="stat-label">Open</div>
+      </div>
+      <div class="stat-card" id="stat-closed">
+        <div class="stat-value stat-red" id="stat-closed-value">--</div>
+        <div class="stat-label">Closed</div>
+      </div>
+      <div class="stat-card" id="stat-positions">
+        <div class="stat-value stat-cyan" id="stat-positions-value">--</div>
+        <div class="stat-label">Available Positions</div>
+      </div>
+    </section>
+
+    <!-- SEARCH & FILTER TOOLBAR -->
+    <section class="toolbar" aria-label="Search and filter">
+      <div class="search-box">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input
+          type="search"
+          id="search-input"
+          class="search-input"
+          placeholder="Search by title, faculty, department..."
+          aria-label="Search opportunities"
+          autocomplete="off"
+        />
+      </div>
+      <div class="filter-group" role="group" aria-label="Filter by status">
+        <button class="filter-btn active" data-filter="all" id="filter-all">All</button>
+        <button class="filter-btn" data-filter="Open" id="filter-open">Open</button>
+        <button class="filter-btn" data-filter="Closed" id="filter-closed">Closed</button>
+      </div>
+      <select id="area-filter" class="area-select" aria-label="Filter by research area">
+        <option value="">All Areas</option>
+      </select>
+    </section>
+
+    <!-- OPPORTUNITIES GRID -->
+    <section class="opportunities-section" aria-label="Research opportunities">
+      <div id="loading-state" class="loading-state" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>Loading opportunities...</p>
+      </div>
+      <div id="empty-state" class="empty-state hidden" aria-live="polite">
+        <div class="empty-icon" aria-hidden="true">🔬</div>
+        <h2>No opportunities found</h2>
+        <p>Try adjusting your filters or create a new research opportunity.</p>
+      </div>
+      <div id="opportunities-grid" class="opportunities-grid" role="list" aria-label="Research opportunities list"></div>
+    </section>
+
+  </main>
+
+  <!-- ── MODAL OVERLAY ──────────────────────────────────────────────────── -->
+  <div id="modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-container" id="modal-container">
+      <button class="modal-close" id="modal-close" aria-label="Close modal">✕</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- ── DETAIL PANEL (SLIDE-IN) ──────────────────────────────────────── -->
+  <aside id="detail-panel" class="detail-panel hidden" role="complementary" aria-label="Opportunity details">
+    <div class="detail-panel-inner">
+      <div class="detail-header">
+        <button class="btn btn-ghost" id="detail-close" aria-label="Close details panel">← Back</button>
+        <div class="detail-actions">
+          <button class="btn btn-secondary" id="detail-edit-btn" aria-label="Edit opportunity">Edit</button>
+          <button class="btn btn-danger" id="detail-delete-btn" aria-label="Delete opportunity">Delete</button>
+        </div>
+      </div>
+      <div id="detail-content"></div>
+    </div>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+{
+  "info": {
+    "_postman_id": "nuces-research-portal-2026",
+    "name": "ResearchNexus — NUCES Research Portal API",
+    "description": "Complete API collection for the University Research Opportunity Portal.\nBackend runs on http://localhost:5000\n\nAssignment #01 — BS CS 5B — Fall 2026 — NUCES Peshawar",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/health",
+          "host": ["{{base_url}}"],
+          "path": ["api", "health"]
+        },
+        "description": "Verify that the API server is running and reachable."
+      },
+      "response": [
+        {
+          "name": "200 OK — Server running",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"message\": \"Research Portal API is running!\",\n  \"timestamp\": \"2026-10-14T06:00:00.000Z\",\n  \"version\": \"1.0.0\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Opportunities",
+      "item": [
+        {
+          "name": "Get All Opportunities",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/opportunities",
+              "host": ["{{base_url}}"],
+              "path": ["api", "opportunities"]
+            },
+            "description": "Returns a list of all research opportunities ordered by creation date (newest first)."
+          },
+          "response": [
+            {
+              "name": "200 OK — List returned",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"count\": 2,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"title\": \"AI-Powered Medical Diagnosis System\",\n      \"status\": \"Open\",\n      \"faculty_name\": \"Dr. Ayesha Tariq\",\n      \"department\": \"Computer Science\",\n      \"available_positions\": 3\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get All — Filter by Status (Open)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/opportunities?status=Open",
+              "host": ["{{base_url}}"],
+              "path": ["api", "opportunities"],
+              "query": [{ "key": "status", "value": "Open" }]
+            }
+          }
+        },
+        {
+          "name": "Get All — Search by Keyword",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/opportunities?search=AI",
+              "host": ["{{base_url}}"],
+              "path": ["api", "opportunities"],
+              "query": [{ "key": "search", "value": "AI" }]
+            }
+          }
+        },
+        {
+          "name": "Get One Opportunity",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/opportunities/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "opportunities", "1"]
+            },
+            "description": "Returns a single research opportunity by its numeric ID."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"data\": { \"id\": 1, \"title\": \"AI-Powered Medical Diagnosis System\", \"status\": \"Open\" }\n}"
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"success\": false,\n  \"message\": \"Research opportunity with ID 999 not found.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Opportunity",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Machine Learning for Seismic Analysis\",\n  \"description\": \"Apply deep learning techniques to predict and classify seismic events using sensor data collected from across Pakistan. The project involves data processing, model development, and real-time monitoring interface.\",\n  \"research_area\": \"Machine Learning\",\n  \"faculty_name\": \"Dr. Zainab Ahmed\",\n  \"department\": \"Computer Science\",\n  \"required_skills\": \"Python, PyTorch, NumPy, Signal Processing, SQL\",\n  \"available_positions\": 2,\n  \"application_deadline\": \"2026-12-31\",\n  \"status\": \"Open\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/opportunities",
+              "host": ["{{base_url}}"],
+              "path": ["api", "opportunities"]
+            },
+            "description": "Creates a new research opportunity. All fields except status are required."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"success\": true,\n  \"message\": \"Research opportunity created successfully.\",\n  \"data\": { \"id\": 7, \"title\": \"Machine Learning for Seismic Analysis\" }\n}"
+            },
+            {
+              "name": "400 Bad Request — Missing fields",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"success\": false,\n  \"message\": \"All required fields must be provided.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Opportunity",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"AI-Powered Medical Diagnosis System (Updated)\",\n  \"description\": \"Updated description: Develop and refine a deep learning model to assist doctors in diagnosing diseases from medical images. Now includes multi-modal data fusion.\",\n  \"research_area\": \"Artificial Intelligence\",\n  \"faculty_name\": \"Dr. Ayesha Tariq\",\n  \"department\": \"Computer Science\",\n  \"required_skills\": \"Python, TensorFlow, PyTorch, OpenCV, REST APIs, Medical Imaging\",\n  \"available_positions\": 4,\n  \"application_deadline\": \"2026-12-30\",\n  \"status\": \"Open\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/opportunities/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "opportunities", "1"]
+            },
+            "description": "Updates all fields of an existing opportunity by ID."
+          },
+          "response": [
+            {
+              "name": "200 OK — Updated",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"Research opportunity updated successfully.\",\n  \"data\": { \"id\": 1, \"title\": \"AI-Powered Medical Diagnosis System (Updated)\" }\n}"
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"success\": false,\n  \"message\": \"Research opportunity with ID 999 not found.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Close Opportunity (Status → Closed)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"AI-Powered Medical Diagnosis System\",\n  \"description\": \"Develop a deep learning model to assist doctors in diagnosing diseases from medical images.\",\n  \"research_area\": \"Artificial Intelligence\",\n  \"faculty_name\": \"Dr. Ayesha Tariq\",\n  \"department\": \"Computer Science\",\n  \"required_skills\": \"Python, TensorFlow, OpenCV\",\n  \"available_positions\": 3,\n  \"application_deadline\": \"2026-12-15\",\n  \"status\": \"Closed\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/opportunities/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "opportunities", "1"]
+            },
+            "description": "Changes the status of an opportunity from Open to Closed."
+          }
+        },
+        {
+          "name": "Delete Opportunity",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/opportunities/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "opportunities", "1"]
+            },
+            "description": "Permanently deletes a research opportunity by ID."
+          },
+          "response": [
+            {
+              "name": "200 OK — Deleted",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"Research opportunity \\\"AI-Powered Medical Diagnosis System\\\" deleted successfully.\"\n}"
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"success\": false,\n  \"message\": \"Research opportunity with ID 1 not found.\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
